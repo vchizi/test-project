@@ -9,11 +9,11 @@ class DefaultControllerTest extends WebTestCase
     /**
      * @dataProvider testRequestsProvider
      */
-    public function testIndex($url, $code)
+    public function testIndex($url, $code, $method = 'GET')
     {
         $client = static::createClient();
 
-        $client->request('GET', $url);
+        $client->request($method, $url);
 
         $this->assertEquals($code, $client->getResponse()->getStatusCode());
     }
@@ -22,6 +22,7 @@ class DefaultControllerTest extends WebTestCase
     {
         return [
             ['/app/default/index', 200],
+            ['/app/default/index', 200, 'POST'],
             ['/app/default/admin', 200],
             ['/app/default/view', 404],
         ];
