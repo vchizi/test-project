@@ -1,0 +1,5 @@
+services:
+    default_controller:
+        class: AppBundle\Controller\DefaultController
+    orders_controller:
+        class: AppBundle\Controller\OrdersController

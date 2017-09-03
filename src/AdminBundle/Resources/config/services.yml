@@ -1,0 +1,8 @@
+services:
+    admin_controller:
+        class: AdminBundle\Controller\AdminController
+    admin_security_listener:
+        class: AdminBundle\EventListeners\SecurityListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller }
+        public: true
