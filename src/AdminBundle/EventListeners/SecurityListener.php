@@ -21,6 +21,7 @@ class SecurityListener implements EventSubscriberInterface
 
     /**
      * @param FilterControllerEvent $event
+     * @return void
      * @throws AccessDeniedHttpException
      */
     public function onKernelController(FilterControllerEvent $event): void
@@ -37,7 +38,7 @@ class SecurityListener implements EventSubscriberInterface
 
         //check headers only for AdminBundle
         $controller = $request->attributes->get('_controller');
-        if (preg_match(self::BUNDLE_PATTERN, $controller, $matcher) !== 1) {
+        if (preg_match(self::BUNDLE_PATTERN, $controller) !== 1) {
             return;
         }
 
@@ -50,7 +51,7 @@ class SecurityListener implements EventSubscriberInterface
     /**
      * @return array
      */
-    public static function getSubscribedEvents(): array
+    public static function getSubscribedEvents()
     {
         return [KernelEvents::CONTROLLER => 'onKernelController'];
     }

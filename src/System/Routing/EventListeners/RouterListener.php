@@ -17,6 +17,7 @@ class RouterListener implements EventSubscriberInterface
 
     /**
      * @param GetResponseEvent $event
+     * @return void
      * @throws NotFoundHttpException
      */
     public function onKernelRequest(GetResponseEvent $event): void
@@ -30,7 +31,7 @@ class RouterListener implements EventSubscriberInterface
 
         //parse path info
         if (preg_match(self::PATH_INFO_PATTERN, $request->getPathInfo(), $matches) === 1) {
-            list($url, $bundle, $controller, $action) = $matches;
+            list(, $bundle, $controller, $action) = $matches;
 
             $bundle = ucfirst($bundle) . 'Bundle';
             $controller = ucfirst($controller) . 'Controller';
@@ -39,7 +40,7 @@ class RouterListener implements EventSubscriberInterface
             $fqcn = $bundle . '\\Controller' . '\\' . $controller;
 
             //check controller and action exists and executable
-            if (class_exists($fqcn) && method_exists(new $fqcn, $action) && is_callable(array($fqcn, $action))) {
+            if (class_exists($fqcn) && method_exists(new $fqcn, $action) && is_callable([$fqcn, $action])) {
                 $request->attributes->add([
                     '_controller' => $fqcn . '::' . $action,
                 ]);
@@ -59,10 +60,12 @@ class RouterListener implements EventSubscriberInterface
     /**
      * @return array
      */
-    public static function getSubscribedEvents(): array
+    public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::REQUEST => [['onKernelRequest', 100]]
+            KernelEvents::REQUEST => [
+                ['onKernelRequest', 100]
+            ]
         ];
     }
 }
